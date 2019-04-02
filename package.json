@@ -1,17 +1,54 @@
 {
   "name": "react-form-constraints",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=v8.10.0"
+  },
+  "author": {
+    "name": "OndeVai",
+    "email": "admin@ronin-dev.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OndeVai/react-form-constraints.git"
+  },
+  "keywords": [
+    "components",
+    "react",
+    "react-component",
+    "toolkit",
+    "form validation",
+    "Constraints API",
+    "HTML5 Form Validation"
+  ],
+  "peerDependencies": {
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8"
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "cross-env": "^5.2.0",
+    "prettier": "^1.16.4",
+    "react-scripts": "2.1.8",
+    "styled-components": "^4.2.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:commonjs": "cross-env NODE_ENV=production babel src/lib --out-dir dist/commonjs --no-babelrc --config-file ./.babelrc-commonjs --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "build:es": "cross-env NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "prebuild": "rm -rf dist",
+    "build": "npm run build:es && npm run build:commonjs",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepublish": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -21,5 +58,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
 }

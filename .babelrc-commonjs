@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["@babel/env", { "modules": "commonjs" }],
+    ["react-app", { "absoluteRuntime": false }]
+  ]
+}
