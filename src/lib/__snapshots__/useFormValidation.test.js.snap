@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TestForm/> matches snapshot 1`] = `
+<form
+  id="test-form"
+  noValidate={true}
+  onSubmit={[Function]}
+>
+  <div>
+    <label
+      htmlFor="inputVal"
+    >
+      InputVal
+    </label>
+    <input
+      name="inputVal"
+      onBlur={[Function]}
+      onChange={[Function]}
+      required={true}
+      type="email"
+      value=""
+    />
+  </div>
+  <div>
+    <button
+      type="submit"
+    >
+      Submit
+    </button>
+  </div>
+</form>
+`;
