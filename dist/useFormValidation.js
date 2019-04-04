@@ -174,23 +174,27 @@ export default (function () {
   };
 
   var validateAll = function validateAll() {
-    var validations = queryDom('input,select,textarea', true).filter(function (_ref2) {
+    var validationsUpd = queryDom('input,select,textarea', true).filter(function (_ref2) {
       var attributes = _ref2.attributes;
-      return attributes.name;
-    }).map(function (_ref3) {
-      var attributes = _ref3.attributes;
-      return attributes.name.value;
-    }).reduce(function (prev, inputName) {
-      return _objectSpread({}, prev, getValidationStateForInputTouched(inputName));
-    }, {}); //todo fix reduce above instead of needing this mutation
-
-    Object.keys(validations).forEach(function (key) {
-      validations[key].touched = true;
-    });
+      return attributes.name && attributes.name.value;
+    }).map(function (input) {
+      return {
+        name: input.attributes.name.value,
+        validity: getValidityForInput(input, getCustomValidations(customValidations), fieldVals)
+      };
+    }).reduce(function (prev, _ref3) {
+      var name = _ref3.name,
+          validity = _ref3.validity;
+      prev[name] = _objectSpread({}, validity, {
+        touched: true,
+        dirty: (validations[name] || {}).dirty || false
+      });
+      return prev;
+    }, {});
     setHasValidatedAll(true);
-    setValidations(validations);
+    setValidations(validationsUpd);
     setShouldFocusFirstInvalid(true);
-    return !getFirstInvalid(validations);
+    return !getFirstInvalid(validationsUpd);
   };
 
   var propsUpdated = mapProps ? _objectSpread({}, mapProps(), fieldVals) : _objectSpread({}, fieldVals);
