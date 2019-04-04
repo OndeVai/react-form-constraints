@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useFormValidation } from '../index'
 
-export default () => {
+export default ({ onSubmit = () => {}, ...props }) => {
   const {
     getFormProps,
     getFieldProps,
     validations,
     hasValidatedAll,
-    inputVal
+    inputVal,
+    selectVal
   } = useFormValidation()
 
-  const [submitted, setSubmitted] = useState(false)
   return (
     <form
       {...getFormProps({
         id: 'test-form',
-        onSubmit: () => setSubmitted(true)
+        onSubmit,
+        ...props
       })}
     >
       <div>
-        {submitted && <div className="valid-submit">I'm valid!</div>}
         <label htmlFor="inputVal">InputVal</label>
         <input
           required
@@ -32,10 +32,27 @@ export default () => {
           !validations.inputVal.valid && (
             <>
               {validations.inputVal.errors.valueMissing && (
-                <span>InputVal is required</span>
+                <span id="requiredInput">InputVal is required</span>
               )}
               {validations.inputVal.errors.typeMismatch && (
-                <span>InputVal must be a valid email</span>
+                <span id="validEmail">InputVal must be a valid email</span>
+              )}
+            </>
+          )}
+      </div>
+      <div>
+        <label htmlFor="selectVal">selectVal</label>
+        <input
+          required
+          value={selectVal || ''}
+          {...getFieldProps({ name: 'selectVal' })}
+        />
+        {hasValidatedAll &&
+          validations.selectVal &&
+          !validations.selectVal.valid && (
+            <>
+              {validations.selectVal.errors.valueMissing && (
+                <span id="requiredSelect">selectVal is required</span>
               )}
             </>
           )}

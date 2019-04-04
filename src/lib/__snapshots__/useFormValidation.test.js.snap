@@ -22,6 +22,20 @@ exports[`<TestForm/> matches snapshot 1`] = `
     />
   </div>
   <div>
+    <label
+      htmlFor="selectVal"
+    >
+      selectVal
+    </label>
+    <input
+      name="selectVal"
+      onBlur={[Function]}
+      onChange={[Function]}
+      required={true}
+      value=""
+    />
+  </div>
+  <div>
     <button
       type="submit"
     >

@@ -35,7 +35,8 @@ const ValidationMessage = styled.span`
   display: block;
 `
 
-const TestForm = () => {
+const TestForm1 = () => {
+  console.log('render form')
   const {
     getFormProps,
     getFieldProps,
@@ -131,4 +132,4 @@ const TestForm = () => {
   )
 }
 
-ReactDOM.render(<TestForm />, document.getElementById('root'))
+ReactDOM.render(<TestForm1 />, document.getElementById('root'))

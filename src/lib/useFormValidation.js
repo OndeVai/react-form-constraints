@@ -149,27 +149,30 @@ export default (options = {}) => {
     Object.keys(currValidations).find(key => !currValidations[key].valid)
 
   const validateAll = () => {
-    const validations = queryDom('input,select,textarea', true)
-      .filter(({ attributes }) => attributes.name)
-      .map(({ attributes }) => attributes.name.value)
-      .reduce(
-        (prev, inputName) => ({
-          ...prev,
-          ...getValidationStateForInputTouched(inputName)
-        }),
-        {}
-      )
-
-    //todo fix reduce above instead of needing this mutation
-    Object.keys(validations).forEach(key => {
-      validations[key].touched = true
-    })
+    const validationsUpd = queryDom('input,select,textarea', true)
+      .filter(({ attributes }) => attributes.name && attributes.name.value)
+      .map(input => ({
+        name: input.attributes.name.value,
+        validity: getValidityForInput(
+          input,
+          getCustomValidations(customValidations),
+          fieldVals
+        )
+      }))
+      .reduce((prev, { name, validity }) => {
+        prev[name] = {
+          ...validity,
+          touched: true,
+          dirty: (validations[name] || {}).dirty || false
+        }
+        return prev
+      }, {})
 
     setHasValidatedAll(true)
-    setValidations(validations)
+    setValidations(validationsUpd)
     setShouldFocusFirstInvalid(true)
 
-    return !getFirstInvalid(validations)
+    return !getFirstInvalid(validationsUpd)
   }
 
   const propsUpdated = mapProps
