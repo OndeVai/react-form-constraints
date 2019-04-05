@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const queryDomRoot = (domRoot, selector, all = false) => {
   const domResults = domRoot[!all ? 'querySelector' : 'querySelectorAll'](
@@ -61,10 +61,31 @@ const getValidationState = (
 
 export default (options = {}) => {
   const { customValidations = {}, mapProps } = options
-  const [hasValidatedAll, setHasValidatedAll] = useState(false)
+  const [hasValidatedAll, origSetHasValidatedAll] = useState(false)
   const [validations, setValidations] = useState({})
   const [fieldVals, setFieldVals] = useState({})
-  const [shouldFocusFirstInvalid, setShouldFocusFirstInvalid] = useState(false)
+  const [shouldFocusFirstInvalid, origSetShouldFocusFirstInvalid] = useState(
+    false
+  )
+
+  const setShouldFocusFirstInvalid = useCallback(
+    val => {
+      if (val !== shouldFocusFirstInvalid) {
+        origSetShouldFocusFirstInvalid(val)
+      }
+    },
+
+    [shouldFocusFirstInvalid]
+  )
+
+  const setHasValidatedAll = useCallback(
+    val => {
+      if (val !== hasValidatedAll) {
+        origSetHasValidatedAll(val)
+      }
+    },
+    [hasValidatedAll]
+  )
 
   useEffect(() => {
     if (!shouldFocusFirstInvalid) return
@@ -137,9 +158,9 @@ export default (options = {}) => {
 
   const validatePropOnBlur = e => {
     e.persist()
+    setShouldFocusFirstInvalid(false)
     setTimeout(() => {
       if (domRoot()) {
-        setShouldFocusFirstInvalid(false)
         handleBlur(e)
       }
     }, 100)

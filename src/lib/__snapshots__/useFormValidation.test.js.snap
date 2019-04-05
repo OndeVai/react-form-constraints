@@ -2,6 +2,7 @@
 
 exports[`<TestForm/> matches snapshot 1`] = `
 <form
+  data-test-id="some-id"
   id="test-form"
   noValidate={true}
   onSubmit={[Function]}
@@ -13,6 +14,7 @@ exports[`<TestForm/> matches snapshot 1`] = `
       InputVal
     </label>
     <input
+      id="input-val"
       name="inputVal"
       onBlur={[Function]}
       onChange={[Function]}

@@ -28,3 +28,17 @@ export const assertValidSubmit = (wrapper, expectedIsValidSubmit) => () => {
   runSubmit(wrapper)()
   expect(onSubmit).toHaveBeenCalledTimes(expectedIsValidSubmit ? 1 : 0)
 }
+
+export const setFormVals = wrapper => (inputVal, selectVal = '') => {
+  wrapper.find('[name="inputVal"]').simulate('change', {
+    target: { value: inputVal, name: 'inputVal' }
+  })
+  wrapper.find('[name="selectVal"]').simulate('change', {
+    target: { value: selectVal, name: 'selectVal' }
+  })
+}
+
+const getField = (wrapper, name) => wrapper.find(`[name="${name}"]`)
+
+export const getInputValField = wrapper => () => getField(wrapper, 'inputVal')
+export const getSelectValField = wrapper => () => getField(wrapper, 'selectVal')

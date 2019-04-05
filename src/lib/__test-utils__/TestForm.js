@@ -11,21 +11,24 @@ export default ({ onSubmit = () => {}, ...props }) => {
     selectVal
   } = useFormValidation()
 
+  //console.log('-----re-render', inputVal, selectVal, validations)
   return (
     <form
       {...getFormProps({
         id: 'test-form',
+        'data-test-id': 'some-id',
         onSubmit,
         ...props
       })}
     >
       <div>
+        {hasValidatedAll && <span id="hasValidatedAll">All validated</span>}
         <label htmlFor="inputVal">InputVal</label>
         <input
           required
           type="email"
           value={inputVal || ''}
-          {...getFieldProps({ name: 'inputVal' })}
+          {...getFieldProps({ name: 'inputVal', id: 'input-val' })}
         />
         {hasValidatedAll &&
           validations.inputVal &&

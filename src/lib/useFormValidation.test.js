@@ -6,7 +6,9 @@ import {
   runMountedTest,
   runSubmit,
   assertValidSubmit,
-  runShallowTest
+  runShallowTest,
+  setFormVals,
+  getInputValField
 } from './__test-utils__'
 //import TestForm from './__test-utils__/TestForm'
 
@@ -32,12 +34,7 @@ describe('<TestForm/>', () => {
 
     it('calls consumer submit if valid input', () => {
       runMountedTest(wrapper => {
-        wrapper.find('[name="inputVal"]').simulate('change', {
-          target: { value: 'ttt@email.com', name: 'inputVal' }
-        })
-        wrapper.find('[name="selectVal"]').simulate('change', {
-          target: { value: 'xxxx', name: 'selectVal' }
-        })
+        setFormVals(wrapper)('ttt@email.com', '1')
         assertValidSubmit(wrapper, true)()
       })
     })
@@ -52,27 +49,77 @@ describe('<TestForm/>', () => {
       })
     })
 
-    it('returns valid on submit', () => {
+    it.each([
+      ['', '', true, false, true],
+      ['xxx', '', false, true, true],
+      ['xxx', '1', false, true, false],
+      ['', '1', true, false, false],
+      ['xxx@email.com', '1', false, false, false]
+    ])(
+      'returns correct validation state based on form state {inputVal: %s, selectVal: %s}',
+      (
+        inputVal,
+        selectVal,
+        requiredInputValErrorExists,
+        validEmailErrorExists,
+        requiredSelectValErrorExists
+      ) => {
+        runMountedTest(wrapper => {
+          const setFormValsForWrapper = setFormVals(wrapper)
+          const runSubmitForWrapper = runSubmit(wrapper)
+
+          //no values for both
+          setFormValsForWrapper(inputVal, selectVal)
+          runSubmitForWrapper()
+          expect(wrapper.find('#requiredInput').exists()).toBe(
+            requiredInputValErrorExists
+          )
+          expect(wrapper.find('#validEmail').exists()).toBe(
+            validEmailErrorExists
+          )
+          expect(wrapper.find('#requiredSelect').exists()).toBe(
+            requiredSelectValErrorExists
+          )
+        })
+      }
+    )
+
+    it('returns correct value for hasValidatedAll after submit', () => {
       runMountedTest(wrapper => {
-        const e = {
-          preventDefault: jest.fn()
-        }
-        runSubmit(wrapper, e)()
-        expect(e.preventDefault).toHaveBeenCalled()
+        expect(wrapper.find('#hasValidatedAll').exists()).toBe(false)
+        runSubmit(wrapper)()
+        expect(wrapper.find('#hasValidatedAll').exists()).toBe(true)
       })
     })
 
-
-    //returns valid validation state based on form state
-
-    //
+    it('adds the props that are passed in', () => {
+      runShallowTest(wrapper => {
+        const { ['data-test-id']: testId, id } = wrapper.find('form').props()
+        expect(testId).toBe('some-id')
+        expect(id).toBe('test-form')
+      })
+    })
   })
 
   describe('getFieldProps()', () => {
-    it('adds the name prop that is passed in', () => {
+    it('adds the props that are passed in', () => {
       runShallowTest(wrapper => {
-        const name = wrapper.find('[name="inputVal"]').props().name
+        const { name, id } = getInputValField(wrapper)().props()
         expect(name).toBe('inputVal')
+        expect(id).toBe('input-val')
+      })
+    })
+
+    //jsdom doesn't seem to work properly for this one
+    xit('triggers validation when field values change', () => {
+      runMountedTest(wrapper => {
+        const setFormValsForWrapper = setFormVals(wrapper)
+        setFormValsForWrapper('valid@email.com', '1')
+        runSubmit(wrapper)()
+        expect(wrapper.find('#requiredInput').exists()).toBe(false)
+        setFormValsForWrapper('xxx', '1')
+        //expect(wrapper.find('#hasValidatedAll').exists()).toBe(true)
+        expect(wrapper.find('#validEmail').exists()).toBe(true)
       })
     })
   })
