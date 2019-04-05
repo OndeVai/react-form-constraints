@@ -1,68 +1,113 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##Description
+A custom React hook for implementing HTML5 form validation using the Constraints API.
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+```
+npm install react-form-constraints
+```
 
-### `npm start`
+##Dependencies
+```
+"react": "^16.8.6",
+"react-dom": "^16.8.6"
+```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##Usage
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```javascript
+import React from 'react'
+import { useFormValidation } from 'react-form-constraints'
 
-### `npm test`
+const TestForm = () => {
+  const {
+    getFormProps,
+    getFieldProps,
+    validations,
+    hasValidatedAll,
+    inputVal,
+    selectVal,
+    textAreaVal
+  } = useFormValidation()
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+  return (
+    <Form
+      {...getFormProps({
+        id: 'test-form',
+        onSubmit: () => alert(`${inputVal} ${selectVal} ${textAreaVal}`)
+      })}
+    >
+      <FieldGroup>
+        <Label htmlFor="inputVal">InputVal</Label>
+        <Input
+          required
+          type="email"
+          value={inputVal || ''}
+          {...getFieldProps({ name: 'inputVal' })}
+        />
+        {hasValidatedAll &&
+          validations.inputVal &&
+          !validations.inputVal.valid && (
+            <>
+              {validations.inputVal.errors.valueMissing && (
+                <ValidationMessage>InputVal is required</ValidationMessage>
+              )}
+              {validations.inputVal.errors.typeMismatch && (
+                <ValidationMessage>
+                  InputVal must be a valid email
+                </ValidationMessage>
+              )}
+            </>
+          )}
+      </FieldGroup>
+      <FieldGroup>
+        <Label htmlFor="selectVal">SelectVal</Label>
+        <Select
+          required
+          value={selectVal || ''}
+          {...getFieldProps({ name: 'selectVal' })}
+        >
+          <option value="">Choose</option>
+          <option value="option1">Option1</option>
+          <option value="option2">Option2</option>
+        </Select>
+        {hasValidatedAll &&
+          validations.selectVal &&
+          !validations.selectVal.valid && (
+            <>
+              {validations.selectVal.errors.valueMissing && (
+                <ValidationMessage>SelectVal is required</ValidationMessage>
+              )}
+            </>
+          )}
+      </FieldGroup>
+      <FieldGroup>
+        <Label htmlFor="textAreaVal">TextAreaVal</Label>
+        <textarea
+          required
+          minLength={3}
+          value={textAreaVal || ''}
+          {...getFieldProps({ name: 'textAreaVal' })}
+        />
+        {hasValidatedAll &&
+          validations.textAreaVal &&
+          !validations.textAreaVal.valid && (
+            <>
+              {validations.textAreaVal.errors.valueMissing && (
+                <ValidationMessage>TextAreaVal is required</ValidationMessage>
+              )}
+              {validations.textAreaVal.errors.tooShort && (
+                <ValidationMessage>
+                  TextAreaVal must be at least 3 chars
+                </ValidationMessage>
+              )}
+            </>
+          )}
+      </FieldGroup>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </Form>
+  )
+}
+```
