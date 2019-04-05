@@ -106,7 +106,7 @@ describe('<TestForm/>', () => {
       runShallowTest(wrapper => {
         const { name, id } = getInputValField(wrapper)().props()
         expect(name).toBe('inputVal')
-        expect(id).toBe('input-val')
+        expect(id).toBe('input-val1')
       })
     })
 
