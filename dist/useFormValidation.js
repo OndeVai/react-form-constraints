@@ -153,6 +153,7 @@ export default (function () {
     var _e$target = e.target,
         name = _e$target.name,
         value = _e$target.value;
+    setShouldFocusFirstInvalid(false);
     setFieldVals(function (prevFieldVals) {
       return _objectSpread({}, prevFieldVals, _defineProperty({}, name, value));
     });

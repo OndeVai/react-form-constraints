@@ -164,6 +164,7 @@ var _default = function _default() {
     var _e$target = e.target,
         name = _e$target.name,
         value = _e$target.value;
+    setShouldFocusFirstInvalid(false);
     setFieldVals(function (prevFieldVals) {
       return (0, _objectSpread4.default)({}, prevFieldVals, (0, _defineProperty2.default)({}, name, value));
     });

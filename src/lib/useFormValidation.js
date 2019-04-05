@@ -147,6 +147,7 @@ export default (options = {}) => {
 
   const validatePropOnChange = e => {
     const { name, value } = e.target
+    setShouldFocusFirstInvalid(false)
     setFieldVals(prevFieldVals => ({ ...prevFieldVals, [name]: value }))
     setValidationStateForInput(name, { dirty: true })
   }
