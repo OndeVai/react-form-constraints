@@ -19,7 +19,6 @@ npm install react-form-constraints
 
 ```javascript
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { useFormValidation } from './lib'
 
 const TestForm = () => {
