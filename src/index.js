@@ -1,39 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import styled from 'styled-components'
 import { useFormValidation } from './lib'
-
-const Form = styled.form`
-  margin: 0 auto;
-  padding: 20px;
-  max-width: 600px;
-  background-color: whitesmoke;
-  border: 1px solid gray;
-`
-
-const FieldGroup = styled.div`
-  margin-bottom: 20px;
-`
-
-const Label = styled.label`
-  display: block;
-  font-weight: bold;
-`
-
-const Input = styled.input`
-  display: block;
-  margin-top: 4px;
-`
-
-const Select = styled.select`
-  display: block;
-  margin-top: 4px;
-`
-
-const ValidationMessage = styled.span`
-  color: red;
-  display: block;
-`
 
 const TestForm = () => {
   console.log('render form')
@@ -48,15 +15,15 @@ const TestForm = () => {
   } = useFormValidation()
 
   return (
-    <Form
+    <form
       {...getFormProps({
         id: 'test-form',
         onSubmit: () => alert(`${inputVal} ${selectVal} ${textAreaVal}`)
       })}
     >
-      <FieldGroup>
-        <Label htmlFor="inputVal">InputVal</Label>
-        <Input
+      <div>
+        <label htmlFor="inputVal">InputVal</label>
+        <input
           required
           type="email"
           value={inputVal || ''}
@@ -67,19 +34,17 @@ const TestForm = () => {
           !validations.inputVal.valid && (
             <>
               {validations.inputVal.errors.valueMissing && (
-                <ValidationMessage>InputVal is required</ValidationMessage>
+                <span>InputVal is required</span>
               )}
               {validations.inputVal.errors.typeMismatch && (
-                <ValidationMessage>
-                  InputVal must be a valid email
-                </ValidationMessage>
+                <span>InputVal must be a valid email</span>
               )}
             </>
           )}
-      </FieldGroup>
-      <FieldGroup>
-        <Label htmlFor="selectVal">SelectVal</Label>
-        <Select
+      </div>
+      <div>
+        <label htmlFor="selectVal">SelectVal</label>
+        <select
           required
           value={selectVal || ''}
           {...getFieldProps({ name: 'selectVal' })}
@@ -87,19 +52,19 @@ const TestForm = () => {
           <option value="">Choose</option>
           <option value="option1">Option1</option>
           <option value="option2">Option2</option>
-        </Select>
+        </select>
         {hasValidatedAll &&
           validations.selectVal &&
           !validations.selectVal.valid && (
             <>
               {validations.selectVal.errors.valueMissing && (
-                <ValidationMessage>SelectVal is required</ValidationMessage>
+                <span>SelectVal is required</span>
               )}
             </>
           )}
-      </FieldGroup>
-      <FieldGroup>
-        <Label htmlFor="textAreaVal">TextAreaVal</Label>
+      </div>
+      <div>
+        <label htmlFor="textAreaVal">TextAreaVal</label>
         <textarea
           required
           minLength={3}
@@ -111,24 +76,18 @@ const TestForm = () => {
           !validations.textAreaVal.valid && (
             <>
               {validations.textAreaVal.errors.valueMissing && (
-                <ValidationMessage>TextAreaVal is required</ValidationMessage>
+                <span>TextAreaVal is required</span>
               )}
               {validations.textAreaVal.errors.tooShort && (
-                  <ValidationMessage>TextAreaVal must be at least 3 chars</ValidationMessage>
+                <span>TextAreaVal must be at least 3 chars</span>
               )}
             </>
           )}
-      </FieldGroup>
-      <pre>
-        <code>
-          Validations:
-          <br /> {JSON.stringify(validations, null, 2)}
-        </code>
-      </pre>
+      </div>
       <div>
         <button type="submit">Submit</button>
       </div>
-    </Form>
+    </form>
   )
 }
 

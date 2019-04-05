@@ -1,4 +1,5 @@
 ## Description
+
 A custom React hook for implementing HTML5 form validation using the Constraints API.
 
 ## Getting Started
@@ -8,6 +9,7 @@ npm install react-form-constraints
 ```
 
 ## Dependencies
+
 ```
 "react": "^16.8.6",
 "react-dom": "^16.8.6"
@@ -17,9 +19,11 @@ npm install react-form-constraints
 
 ```javascript
 import React from 'react'
-import { useFormValidation } from 'react-form-constraints'
+import ReactDOM from 'react-dom'
+import { useFormValidation } from './lib'
 
 const TestForm = () => {
+  console.log('render form')
   const {
     getFormProps,
     getFieldProps,
@@ -31,15 +35,15 @@ const TestForm = () => {
   } = useFormValidation()
 
   return (
-    <Form
+    <form
       {...getFormProps({
         id: 'test-form',
         onSubmit: () => alert(`${inputVal} ${selectVal} ${textAreaVal}`)
       })}
     >
-      <FieldGroup>
-        <Label htmlFor="inputVal">InputVal</Label>
-        <Input
+      <div>
+        <label htmlFor="inputVal">InputVal</label>
+        <input
           required
           type="email"
           value={inputVal || ''}
@@ -50,19 +54,17 @@ const TestForm = () => {
           !validations.inputVal.valid && (
             <>
               {validations.inputVal.errors.valueMissing && (
-                <ValidationMessage>InputVal is required</ValidationMessage>
+                <span>InputVal is required</span>
               )}
               {validations.inputVal.errors.typeMismatch && (
-                <ValidationMessage>
-                  InputVal must be a valid email
-                </ValidationMessage>
+                <span>InputVal must be a valid email</span>
               )}
             </>
           )}
-      </FieldGroup>
-      <FieldGroup>
-        <Label htmlFor="selectVal">SelectVal</Label>
-        <Select
+      </div>
+      <div>
+        <label htmlFor="selectVal">SelectVal</label>
+        <select
           required
           value={selectVal || ''}
           {...getFieldProps({ name: 'selectVal' })}
@@ -70,19 +72,19 @@ const TestForm = () => {
           <option value="">Choose</option>
           <option value="option1">Option1</option>
           <option value="option2">Option2</option>
-        </Select>
+        </select>
         {hasValidatedAll &&
           validations.selectVal &&
           !validations.selectVal.valid && (
             <>
               {validations.selectVal.errors.valueMissing && (
-                <ValidationMessage>SelectVal is required</ValidationMessage>
+                <span>SelectVal is required</span>
               )}
             </>
           )}
-      </FieldGroup>
-      <FieldGroup>
-        <Label htmlFor="textAreaVal">TextAreaVal</Label>
+      </div>
+      <div>
+        <label htmlFor="textAreaVal">TextAreaVal</label>
         <textarea
           required
           minLength={3}
@@ -94,20 +96,18 @@ const TestForm = () => {
           !validations.textAreaVal.valid && (
             <>
               {validations.textAreaVal.errors.valueMissing && (
-                <ValidationMessage>TextAreaVal is required</ValidationMessage>
+                <span>TextAreaVal is required</span>
               )}
               {validations.textAreaVal.errors.tooShort && (
-                <ValidationMessage>
-                  TextAreaVal must be at least 3 chars
-                </ValidationMessage>
+                <span>TextAreaVal must be at least 3 chars</span>
               )}
             </>
           )}
-      </FieldGroup>
+      </div>
       <div>
         <button type="submit">Submit</button>
       </div>
-    </Form>
+    </form>
   )
 }
 ```
