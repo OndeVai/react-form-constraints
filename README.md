@@ -1,4 +1,4 @@
-##Description
+## Description
 A custom React hook for implementing HTML5 form validation using the Constraints API.
 
 ## Getting Started
@@ -7,13 +7,13 @@ A custom React hook for implementing HTML5 form validation using the Constraints
 npm install react-form-constraints
 ```
 
-##Dependencies
+## Dependencies
 ```
 "react": "^16.8.6",
 "react-dom": "^16.8.6"
 ```
 
-##Usage
+## Usage
 
 ```javascript
 import React from 'react'
