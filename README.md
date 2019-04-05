@@ -22,7 +22,6 @@ import React from 'react'
 import { useFormValidation } from 'react-form-constraints'
 
 const TestForm = () => {
-  console.log('render form')
   const {
     getFormProps,
     getFieldProps,
