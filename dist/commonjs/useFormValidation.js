@@ -70,7 +70,7 @@ var _default = function _default() {
   var _useState = (0, _react.useState)(false),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       hasValidatedAll = _useState2[0],
-      setHasValidatedAll = _useState2[1];
+      origSetHasValidatedAll = _useState2[1];
 
   var _useState3 = (0, _react.useState)({}),
       _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
@@ -85,8 +85,18 @@ var _default = function _default() {
   var _useState7 = (0, _react.useState)(false),
       _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
       shouldFocusFirstInvalid = _useState8[0],
-      setShouldFocusFirstInvalid = _useState8[1];
+      origSetShouldFocusFirstInvalid = _useState8[1];
 
+  var setShouldFocusFirstInvalid = (0, _react.useCallback)(function (val) {
+    if (val !== shouldFocusFirstInvalid) {
+      origSetShouldFocusFirstInvalid(val);
+    }
+  }, [shouldFocusFirstInvalid]);
+  var setHasValidatedAll = (0, _react.useCallback)(function (val) {
+    if (val !== hasValidatedAll) {
+      origSetHasValidatedAll(val);
+    }
+  }, [hasValidatedAll]);
   (0, _react.useEffect)(function () {
     if (!shouldFocusFirstInvalid) return;
     var firstInvalidName = getFirstInvalid();
@@ -169,9 +179,9 @@ var _default = function _default() {
 
   var validatePropOnBlur = function validatePropOnBlur(e) {
     e.persist();
+    setShouldFocusFirstInvalid(false);
     setTimeout(function () {
       if (domRoot()) {
-        setShouldFocusFirstInvalid(false);
         handleBlur(e);
       }
     }, 100);

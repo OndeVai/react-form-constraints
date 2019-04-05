@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { useFormValidation } from './lib'
-import TestForm from '../src/lib/__test-utils__/TestForm'
 
 const Form = styled.form`
   margin: 0 auto;
@@ -36,7 +35,7 @@ const ValidationMessage = styled.span`
   display: block;
 `
 
-const TestForm1 = () => {
+const TestForm = () => {
   console.log('render form')
   const {
     getFormProps,

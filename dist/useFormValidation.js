@@ -2,7 +2,7 @@ import _objectWithoutProperties from "@babel/runtime/helpers/esm/objectWithoutPr
 import _slicedToArray from "@babel/runtime/helpers/esm/slicedToArray";
 import _defineProperty from "@babel/runtime/helpers/esm/defineProperty";
 import _objectSpread from "@babel/runtime/helpers/esm/objectSpread";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 var queryDomRoot = function queryDomRoot(domRoot, selector) {
   var all = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -59,7 +59,7 @@ export default (function () {
   var _useState = useState(false),
       _useState2 = _slicedToArray(_useState, 2),
       hasValidatedAll = _useState2[0],
-      setHasValidatedAll = _useState2[1];
+      origSetHasValidatedAll = _useState2[1];
 
   var _useState3 = useState({}),
       _useState4 = _slicedToArray(_useState3, 2),
@@ -74,8 +74,18 @@ export default (function () {
   var _useState7 = useState(false),
       _useState8 = _slicedToArray(_useState7, 2),
       shouldFocusFirstInvalid = _useState8[0],
-      setShouldFocusFirstInvalid = _useState8[1];
+      origSetShouldFocusFirstInvalid = _useState8[1];
 
+  var setShouldFocusFirstInvalid = useCallback(function (val) {
+    if (val !== shouldFocusFirstInvalid) {
+      origSetShouldFocusFirstInvalid(val);
+    }
+  }, [shouldFocusFirstInvalid]);
+  var setHasValidatedAll = useCallback(function (val) {
+    if (val !== hasValidatedAll) {
+      origSetHasValidatedAll(val);
+    }
+  }, [hasValidatedAll]);
   useEffect(function () {
     if (!shouldFocusFirstInvalid) return;
     var firstInvalidName = getFirstInvalid();
@@ -158,9 +168,9 @@ export default (function () {
 
   var validatePropOnBlur = function validatePropOnBlur(e) {
     e.persist();
+    setShouldFocusFirstInvalid(false);
     setTimeout(function () {
       if (domRoot()) {
-        setShouldFocusFirstInvalid(false);
         handleBlur(e);
       }
     }, 100);

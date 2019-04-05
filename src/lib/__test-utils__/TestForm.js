@@ -11,7 +11,6 @@ export default ({ onSubmit = () => {}, ...props }) => {
     selectVal
   } = useFormValidation()
 
-  //console.log('-----re-render', inputVal, selectVal, validations)
   return (
     <form
       {...getFormProps({
